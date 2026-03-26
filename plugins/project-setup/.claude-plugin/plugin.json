@@ -1,0 +1,7 @@
+{
+  "name": "project-setup",
+  "description": "Intelligently bootstraps any project using Claude Code's full feature set",
+  "author": {
+    "name": "mindfilter"
+  }
+}

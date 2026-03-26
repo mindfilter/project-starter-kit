@@ -1,0 +1,113 @@
+{
+  "skill_name": "project-setup",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I want to build a FastAPI backend with PostgreSQL, JWT authentication, and a REST API. I'm a solo developer and this will be a production app. Set up my project.",
+      "expected_output": "Creates Python project structure (src/routers, models, schemas, services), CLAUDE.md with FastAPI/Python context, .mcp.json with postgres and context7 MCP servers, .claude/settings.json with ruff hooks and .env protection, .env.example with DATABASE_URL and JWT_SECRET, recommends feature-dev and commit-commands plugins.",
+      "files": [],
+      "assertions": [
+        {
+          "id": "claude-md-exists-and-relevant",
+          "text": "CLAUDE.md exists and mentions FastAPI, PostgreSQL, and JWT"
+        },
+        {
+          "id": "mcp-json-has-postgres",
+          "text": ".mcp.json includes a postgres or supabase MCP server"
+        },
+        {
+          "id": "mcp-json-has-context7",
+          "text": ".mcp.json includes context7 MCP server"
+        },
+        {
+          "id": "settings-has-python-hook",
+          "text": ".claude/settings.json includes a Python linting/formatting hook (ruff or similar)"
+        },
+        {
+          "id": "settings-has-env-protection",
+          "text": ".claude/settings.json includes a hook to protect .env files from edits"
+        },
+        {
+          "id": "env-example-has-db-and-jwt",
+          "text": ".env.example exists and includes DATABASE_URL and a JWT-related variable"
+        },
+        {
+          "id": "folder-structure-has-src-layers",
+          "text": "Project folder structure includes src/ directory with at least two of: routers/, models/, schemas/, services/"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Help me start a Claude agent app. I want it to be able to search the web, read files, and call external APIs. I'm building this for a small startup team.",
+      "expected_output": "Creates Python agent app structure (src/agent.py, tools/, prompts/), CLAUDE.md explaining agent architecture, .mcp.json with brave-search and context7 MCP servers, recommends claude-api skill and agent-sdk-dev plugin, .claude/settings.json with ruff hooks, offers playground concept map visualization of agent architecture.",
+      "files": [],
+      "assertions": [
+        {
+          "id": "claude-md-mentions-agent",
+          "text": "CLAUDE.md exists and mentions agent, Claude API, or Anthropic SDK"
+        },
+        {
+          "id": "mcp-json-has-web-search",
+          "text": ".mcp.json includes a web search MCP server (brave-search or similar)"
+        },
+        {
+          "id": "mcp-json-has-context7",
+          "text": ".mcp.json includes context7 MCP server"
+        },
+        {
+          "id": "folder-has-agent-structure",
+          "text": "Folder structure includes src/tools/ or src/agent.py, reflecting an agent architecture"
+        },
+        {
+          "id": "env-example-has-anthropic-key",
+          "text": ".env.example includes ANTHROPIC_API_KEY"
+        },
+        {
+          "id": "ai-plugin-recommended",
+          "text": "An AI/agent-relevant plugin is mentioned in summary (agent-sdk-dev, claude-api, or mcp-server-dev)"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "I need to set up a Next.js e-commerce site with Stripe payments, Supabase for the database, and Clerk for auth. This is for a small team of 3 developers.",
+      "expected_output": "Creates Next.js app router structure (src/app, components, lib, types), CLAUDE.md with Next.js/Supabase/Stripe/Clerk tech stack details, .mcp.json with supabase, stripe, context7, and playwright MCP servers, .claude/settings.json with ESLint+Prettier hooks, recommends commit-commands and pr-review-toolkit plugins, .env.example with NEXT_PUBLIC_SUPABASE_URL, STRIPE_SECRET_KEY, CLERK_SECRET_KEY.",
+      "files": [],
+      "assertions": [
+        {
+          "id": "claude-md-has-full-stack",
+          "text": "CLAUDE.md mentions Next.js, Stripe, Supabase, and Clerk"
+        },
+        {
+          "id": "mcp-json-has-supabase",
+          "text": ".mcp.json includes supabase MCP server"
+        },
+        {
+          "id": "mcp-json-has-stripe",
+          "text": ".mcp.json includes stripe MCP server"
+        },
+        {
+          "id": "mcp-json-has-context7",
+          "text": ".mcp.json includes context7 MCP server"
+        },
+        {
+          "id": "settings-has-ts-formatting",
+          "text": ".claude/settings.json includes ESLint or Prettier hook for TypeScript/JavaScript"
+        },
+        {
+          "id": "env-example-has-all-three-services",
+          "text": ".env.example includes variables for Supabase (URL or key), Stripe (secret key), and Clerk (secret key)"
+        },
+        {
+          "id": "folder-has-app-router",
+          "text": "Folder structure includes src/app/ directory (Next.js App Router pattern)"
+        },
+        {
+          "id": "team-plugin-recommended",
+          "text": "A team-collaboration plugin is mentioned (pr-review-toolkit, commit-commands, or code-review)"
+        }
+      ]
+    }
+  ]
+}

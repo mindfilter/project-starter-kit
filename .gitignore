@@ -1,0 +1,9 @@
+# Eval workspace (large, not needed for marketplace users)
+plugins/project-setup/skills/project-setup-workspace/
+
+# Claude local session files
+.claude/settings.local.json
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "mindfilter-marketplace",
+  "description": "A curated collection of Claude Code skills and plugins for intelligent project setup and development workflows",
+  "owner": {
+    "name": "mindfilter"
+  },
+  "plugins": [
+    {
+      "name": "project-setup",
+      "description": "Intelligently bootstraps any project using Claude Code's full feature set — asks targeted questions, installs MCP servers, plugins, hooks, and scaffolds the complete folder structure and markdown files.",
+      "category": "development",
+      "source": "./plugins/project-setup",
+      "homepage": "https://github.com/mindfilter/project-setup-skill"
+    }
+  ]
+}
