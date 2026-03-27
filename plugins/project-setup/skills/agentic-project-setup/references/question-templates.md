@@ -6,11 +6,20 @@ Use the AskUserQuestion tool for each group. Run no more than 4 questions per ca
 
 ## Round 1 — Core Intent
 
-Always ask all four questions in a single AskUserQuestion call.
+Round 1 has six questions — split across two AskUserQuestion calls (max 4 per call).
 
+**Call 1a (first AskUserQuestion):**
 ```
 Question 1: "Describe your multi-agent system — what will it do and what problem does it solve?"
 (free text / Other)
+
+Question 1b: "What is the mission of this agent system — why does it exist? (one sentence)"
+(free text — e.g., "Help researchers find and synthesize academic literature faster")
+Store answer as: mission
+
+Question 1c: "What does success look like when this system is working perfectly?"
+(free text — e.g., "A researcher gets a fully cited synthesis in under 2 minutes with no manual search")
+Store answer as: vision
 
 Question 2: "What's your tech stack?"
 Options:
@@ -18,7 +27,10 @@ Options:
 - TypeScript / Node.js (Anthropic SDK, LangChain.js, or custom)
 - I don't know yet — help me pick
 - Other (free text)
+```
 
+**Call 1b (second AskUserQuestion):**
+```
 Question 3: "Which orchestration pattern fits your system?"
 Options:
 - Orchestrator-worker (one orchestrator routes tasks to N specialized agents)
