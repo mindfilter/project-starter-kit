@@ -7,3 +7,6 @@ plugins/project-setup/skills/project-setup-workspace/
 # OS
 .DS_Store
 Thumbs.db
+
+# Secrets
+.env

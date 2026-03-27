@@ -1,0 +1,105 @@
+{
+  "skill_name": "agentic-project-setup",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I want to build a multi-agent research pipeline: an orchestrator that routes queries to specialized agents (web researcher, document analyzer, synthesizer). Python, small startup team.",
+      "expected_output": "Creates Python multi-agent project structure with agents/ directory containing researcher, analyzer, and synthesizer agents, state/ or context.py for shared state, prompts/agents/ for agent-specific prompts, CLAUDE.md documenting agent architecture and orchestration routing logic, .mcp.json with memory and brave-search MCP servers.",
+      "files": [],
+      "assertions": [
+        {
+          "id": "claude-md-has-agent-architecture",
+          "text": "CLAUDE.md contains 'Agent Architecture' or 'Agent Roles'"
+        },
+        {
+          "id": "claude-md-mentions-orchestrator",
+          "text": "CLAUDE.md mentions orchestrator and routing logic"
+        },
+        {
+          "id": "claude-md-mentions-all-agent-roles",
+          "text": "CLAUDE.md mentions researcher, analyzer, and synthesizer agents (or similar role names)"
+        },
+        {
+          "id": "folder-has-agents-directory",
+          "text": "Folder structure includes agents/ directory with agent files"
+        },
+        {
+          "id": "folder-has-shared-state",
+          "text": "Folder structure includes state/ directory or context.py for shared state"
+        },
+        {
+          "id": "folder-has-agent-prompts",
+          "text": "Folder structure includes prompts/agents/ directory"
+        },
+        {
+          "id": "mcp-json-has-memory-and-search",
+          "text": ".mcp.json includes memory and brave-search servers"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Build a TypeScript agent system: an orchestrator that dispatches to a coder agent and a reviewer agent that run in parallel. Solo developer, production system.",
+      "expected_output": "Creates TypeScript multi-agent project with orchestrator.ts, agents/coder.ts and agents/reviewer.ts for parallel execution, state/context.ts for shared state, CLAUDE.md describing fan-out parallel orchestration pattern and coder/reviewer agent roles, .mcp.json with memory and github MCP servers, .claude/settings.json with ESLint/Prettier or TypeScript hooks.",
+      "files": [],
+      "assertions": [
+        {
+          "id": "claude-md-mentions-parallel-pattern",
+          "text": "CLAUDE.md mentions 'fan-out' or 'parallel' as orchestration pattern"
+        },
+        {
+          "id": "claude-md-mentions-coder-reviewer",
+          "text": "CLAUDE.md mentions coder and reviewer agent roles"
+        },
+        {
+          "id": "folder-uses-typescript",
+          "text": "Folder structure uses TypeScript (orchestrator.ts, agents/*.ts)"
+        },
+        {
+          "id": "folder-has-state-context",
+          "text": "Folder structure includes state/context.ts"
+        },
+        {
+          "id": "mcp-json-has-memory-and-github",
+          "text": ".mcp.json includes memory and github servers"
+        },
+        {
+          "id": "settings-has-ts-hook",
+          "text": ".claude/settings.json has ESLint/Prettier or TypeScript hook"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Multi-agent customer support system: a router agent classifies support tickets and dispatches to specialized agents for billing, technical, and general inquiries. Python, team of 4.",
+      "expected_output": "Creates Python multi-agent project with router-pattern orchestration, agents/billing.py, agents/technical.py, and agents/general.py for specialized dispatch, prompts/agents/ for per-agent prompts, CLAUDE.md describing router orchestration pattern and billing/technical/general agent roles, .mcp.json with memory MCP server, recommends feature-dev plugin for team of 4.",
+      "files": [],
+      "assertions": [
+        {
+          "id": "claude-md-mentions-router-pattern",
+          "text": "CLAUDE.md mentions 'router' as orchestration pattern"
+        },
+        {
+          "id": "claude-md-mentions-support-agents",
+          "text": "CLAUDE.md mentions billing, technical, and general agents (or similar names)"
+        },
+        {
+          "id": "folder-has-named-agent-files",
+          "text": "Folder structure includes agents/billing.py, agents/technical.py or similar named files"
+        },
+        {
+          "id": "folder-has-agent-prompts",
+          "text": "Folder structure includes prompts/agents/ directory"
+        },
+        {
+          "id": "mcp-json-has-memory",
+          "text": ".mcp.json includes memory server"
+        },
+        {
+          "id": "feature-dev-plugin-recommended",
+          "text": "Plugin recommendations include feature-dev (team signal with 4 people)"
+        }
+      ]
+    }
+  ]
+}
