@@ -1,4 +1,4 @@
-# mindfilter-marketplace
+# project-starter-kit
 
 A curated collection of Claude Code skills and plugins for intelligent project workflows.
 
@@ -7,13 +7,13 @@ A curated collection of Claude Code skills and plugins for intelligent project w
 Add this marketplace to Claude Code:
 
 ```
-/plugin marketplace add mindfilter/project-setup-skill
+/plugin marketplace add mindfilter/project-starter-kit
 ```
 
 Then browse and install individual plugins:
 
 ```
-/plugin install project-setup@mindfilter-marketplace
+/plugin install project-setup@project-starter-kit
 ```
 
 ## Plugins
@@ -58,4 +58,4 @@ Before using `project-setup`, install these from the official marketplace:
 
 ## Contributing
 
-Open a PR or issue on [GitHub](https://github.com/mindfilter/project-setup-skill) to suggest new plugins or improvements.
+Open a PR or issue on [GitHub](https://github.com/mindfilter/project-starter-kit) to suggest new plugins or improvements.
