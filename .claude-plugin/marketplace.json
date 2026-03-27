@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "project-setup",
-      "description": "Intelligently bootstraps any project using Claude Code's full feature set — asks targeted questions, installs MCP servers, plugins, hooks, and scaffolds the complete folder structure and markdown files.",
+      "description": "Intelligently bootstraps any project using Claude Code's full feature set — asks targeted questions, installs MCP servers, plugins, hooks, and scaffolds the complete folder structure and markdown files. Includes agentic-project-setup for multi-agent orchestration projects: scaffolds orchestrator, typed agent stubs, shared state, prompt files, and token budget management for orchestrator-worker, pipeline, fan-out, router, and swarm patterns.",
       "category": "development",
       "source": "./plugins/project-setup",
       "homepage": "https://github.com/mindfilter/project-starter-kit"
