@@ -11,7 +11,6 @@ description: >
   AI agents working together.
   This skill scaffolds orchestration-ready folder structure, agent role architecture,
   shared state management, MCP servers, plugins, hooks, and CLAUDE.md.
-tools: Read, Glob, Grep, Bash, Edit, Write
 ---
 
 # Agentic Project Setup
@@ -124,8 +123,9 @@ After approval, load `references/folder-structures.md` for the directory layout 
 7. **src/agents/base.py** (or `base.ts`) — a minimal abstract base class or interface stub that all agents inherit from
 8. **src/agents/[each-named-role].py** — one stub file per agent, inheriting from base, with the agent's responsibility noted in a docstring
 9. **src/prompts/agents/[each-named-role].md** — placeholder system prompt per agent with a comment to fill in the agent's role, tone, constraints, and output format
-10. **src/orchestrator.py** (or `.ts`) — stub with routing logic that imports each agent and shows the handoff pattern
-11. **README.md** — brief stub with key commands and architecture overview
+10. **src/budget.py** (or `budget.ts`) — `TokenBudget` dataclass stub: `total`, `spent`, `remaining`, `utilization`, `record(usage)`, `agent_config(priority)`. Include a comment explaining the pattern: the orchestrator imports this and checks `agent_config()` before every agent dispatch.
+11. **src/orchestrator.py** (or `.ts`) — stub with routing logic that imports each agent and the `TokenBudget`, shows the dispatch-check pattern: `config = budget.agent_config(priority); if config is None: skip`
+12. **README.md** — brief stub with key commands and architecture overview
 
 After creating each file, briefly note what it does. For agent stubs especially, explain the pattern to follow when implementing the agent's logic — the user is learning the architecture as you build it.
 

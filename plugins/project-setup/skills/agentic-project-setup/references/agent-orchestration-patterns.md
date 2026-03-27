@@ -175,6 +175,74 @@ Multi-agent systems cost significantly more to run than single-agent systems —
 
 **Design implication**: keep agent context windows lean. Each agent should receive only the slice of state it needs (see Agent isolation below), not the full context object. Bloated context windows are the primary cost driver in multi-agent systems.
 
+### Budget-Aware Orchestration
+
+In the orchestrator-worker pattern, the orchestrator can act as a resource manager — tracking remaining token budget across all agent calls and making dispatch decisions based on what's left, just as a project manager allocates budget across a team.
+
+The Anthropic SDK exposes everything needed:
+
+```python
+# Before a call — estimate cost without sending
+token_estimate = client.messages.count_tokens(
+    model="claude-opus-4-6",
+    messages=[{"role": "user", "content": agent_prompt}]
+).input_tokens
+
+# After a call — record actual spend
+response = client.messages.create(...)
+budget.record(response.usage)  # usage.input_tokens + usage.output_tokens
+
+# Per-call — cap what an agent can output
+client.messages.create(max_tokens=256)
+```
+
+Scaffold a `src/budget.py` (or `budget.ts`) utility that the orchestrator imports:
+
+```python
+# src/budget.py
+from dataclasses import dataclass, field
+from anthropic.types import Usage
+
+@dataclass
+class TokenBudget:
+    total: int
+    spent: int = 0
+
+    @property
+    def remaining(self) -> int:
+        return self.total - self.spent
+
+    @property
+    def utilization(self) -> float:
+        return self.spent / self.total
+
+    def record(self, usage: Usage) -> None:
+        self.spent += usage.input_tokens + usage.output_tokens
+
+    def agent_config(self, priority: str = "normal") -> dict | None:
+        """
+        Returns kwargs to pass to client.messages.create(), scaled to remaining budget.
+        Returns None if this agent should be skipped entirely.
+        """
+        if self.utilization < 0.5:
+            return {"max_tokens": 4096}
+        elif self.utilization < 0.8:
+            return {"max_tokens": 1024}
+        else:
+            if priority == "low":
+                return None  # skip non-essential agents when budget is tight
+            return {"max_tokens": 256}
+```
+
+The orchestrator checks `budget.agent_config(priority)` before each dispatch. `None` means skip or degrade; a dict means forward those kwargs to the API call. This keeps budget logic out of individual agents — they just execute with the resources they're given.
+
+**Three scenarios where this pays off**:
+1. **Research pipelines** — skip the low-priority synthesis step if 80% of budget is spent and the core output is already done
+2. **Retry loops** — check remaining budget before retrying a failed agent; a retry under severe constraint may warrant a simpler prompt
+3. **Fan-out scaling** — `n_agents = min(desired, remaining // estimated_cost_per_agent)` instead of always spawning a fixed N
+
+**Honest caveat**: `count_tokens` adds a round-trip API call before every agent invocation. For tight loops, use heuristics (prompt character count × factor) for cheap agents and reserve pre-flight counting for expensive ones.
+
 ---
 
 ## Key Design Principles

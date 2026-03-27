@@ -66,6 +66,10 @@
         {
           "id": "settings-has-ts-hook",
           "text": ".claude/settings.json has ESLint/Prettier or TypeScript hook"
+        },
+        {
+          "id": "folder-has-budget-utility",
+          "text": "Folder structure includes src/budget.ts (or budget.py) token budget utility"
         }
       ]
     },

@@ -25,6 +25,7 @@ project-name/
 │   ├── prompts/
 │   │   ├── orchestrator.md      ← orchestrator system prompt
 │   │   └── agents/              ← one prompt file per agent role
+│   ├── budget.py                ← token budget tracker; orchestrator imports this
 │   └── utils/
 ├── tests/
 │   └── conftest.py
@@ -55,6 +56,7 @@ project-name/
 │   │   └── context.ts           ← typed context object
 │   ├── tools/                   ← shared tool definitions
 │   │   └── index.ts
+│   ├── budget.ts                ← token budget tracker; orchestrator imports this
 │   └── prompts/
 │       ├── orchestrator.md
 │       └── agents/              ← one .md per agent role
@@ -125,9 +127,19 @@ Key variables:
 - `ANTHROPIC_API_KEY` — required for all agent LLM calls
 - [OTHER_VAR] — [description]
 
+## Operational Considerations
+
+**Token cost**: Multi-agent systems run at significantly higher token cost than single-agent — budget accordingly for production workloads. Token budget management is in `src/budget.py` (or `budget.ts`).
+
+**Failure handling**:
+- Critical agents (blocks the pipeline if they fail): [list them]
+- Optional agents (system degrades gracefully if they fail): [list them]
+- Retry strategy: [e.g., exponential backoff with 3 retries; circuit breaker after 5 consecutive failures]
+
 ## Conventions
 - Agents are stateless — all state is passed via the context object, never stored on the agent instance
 - Each agent has exactly one system prompt file in `src/prompts/agents/`
 - Tools are defined in `src/tools/` and imported by agents that need them; never defined inline
 - All inter-agent communication goes through the orchestrator; agents do not call each other directly
+- The orchestrator checks `TokenBudget.agent_config()` before each dispatch and respects `None` (skip) returns
 ```
