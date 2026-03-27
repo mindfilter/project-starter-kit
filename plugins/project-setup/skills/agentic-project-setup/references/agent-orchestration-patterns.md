@@ -6,13 +6,13 @@ Reference: load this file during research and scaffold phases when agentic signa
 
 ## Orchestration Patterns
 
-| Pattern | Description | Use When |
-|---------|-------------|----------|
-| **Orchestrator-worker** | One orchestrator routes tasks to N specialized workers, collects results | Tasks are categorically distinct; each worker is an expert in one domain |
-| **Pipeline** | Agents pass output sequentially — A → B → C | Each stage transforms output from the previous; strict ordering required |
-| **Fan-out / fan-in** | Orchestrator spawns parallel agents for the same task, aggregates results | Tasks are independent and can run concurrently (e.g., multi-source research) |
-| **Router** | A classifier agent inspects input and hands off to the right specialist | Input type is unpredictable at design time; specialists are mutually exclusive |
-| **Swarm / peer-to-peer** | Agents detect handoff signals and route directly to the next appropriate agent; no central coordinator | Requirements emerge dynamically; rigid upfront planning is counterproductive; no single point of failure required |
+| Pattern | Description | Use When | OKR Compatible |
+|---------|-------------|----------|----------------|
+| **Orchestrator-worker** | One orchestrator routes tasks to N specialized workers, collects results | Tasks are categorically distinct; each worker is an expert in one domain | Yes |
+| **Pipeline** | Agents pass output sequentially — A → B → C | Each stage transforms output from the previous; strict ordering required | Yes |
+| **Fan-out / fan-in** | Orchestrator spawns parallel agents for the same task, aggregates results | Tasks are independent and can run concurrently (e.g., multi-source research) | Yes |
+| **Router** | A classifier agent inspects input and hands off to the right specialist | Input type is unpredictable at design time; specialists are mutually exclusive | Yes |
+| **Swarm / peer-to-peer** | Agents detect handoff signals and route directly to the next appropriate agent; no central coordinator | Requirements emerge dynamically; rigid upfront planning is counterproductive; no single point of failure required | No — no central registry |
 
 Most real systems combine patterns. A router often dispatches to orchestrator-worker sub-graphs.
 
@@ -254,3 +254,17 @@ The orchestrator checks `budget.agent_config(priority)` before each dispatch. `N
 **State is explicit** — context object is typed; no hidden globals. Every field has an owner and a consumer.
 
 **Agents are stateless** — all state is passed in, nothing stored on the agent object itself. The same agent can be called with different contexts without side effects.
+
+---
+
+## OKR-Driven Goal Tracking
+
+All hierarchical patterns (orchestrator-worker, pipeline, fan-out/fan-in, router) support OKR tracking. See `references/okr-orchestration.md` for the full guide and orchestrator template.
+
+The `src/okr/` module provides:
+- `OKRRegistry` — mission, vision, objectives, key results
+- `KRUpdate` — agent progress report (score 0.0–1.0 + narrative)
+- `evaluate()` — threshold check with self-correction action
+- `format_escalation_report()` — human-readable escalation output
+
+Swarm/P2P patterns do not use OKRs. OKRs require a central authority to set objectives and monitor key results — swarm systems have no such authority by design.

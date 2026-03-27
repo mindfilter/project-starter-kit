@@ -1,3 +1,6 @@
+# Git worktrees
+.worktrees/
+
 # Eval workspace (large, not needed for marketplace users)
 plugins/project-setup/skills/project-setup-workspace/
 

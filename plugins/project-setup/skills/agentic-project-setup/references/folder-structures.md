@@ -26,6 +26,12 @@ project-name/
 │   │   ├── orchestrator.md      ← orchestrator system prompt
 │   │   └── agents/              ← one prompt file per agent role
 │   ├── budget.py                ← token budget tracker; orchestrator imports this
+│   ├── okr/                     ← OKR module (skip for Swarm/P2P)
+│   │   ├── __init__.py
+│   │   ├── types.py             ← KRUpdate dataclass
+│   │   ├── registry.py          ← KeyResult, Objective, OKRRegistry
+│   │   ├── evaluator.py         ← evaluate(), process_updates(), SelfCorrectionAction
+│   │   └── escalation.py        ← format_escalation_report()
 │   └── utils/
 ├── tests/
 │   └── conftest.py
@@ -136,10 +142,35 @@ Key variables:
 - Optional agents (system degrades gracefully if they fail): [list them]
 - Retry strategy: [e.g., exponential backoff with 3 retries; circuit breaker after 5 consecutive failures]
 
+## OKR Contract
+
+**Mission:** [mission from interview]
+**Vision:** [vision from interview]
+
+OKRs are initialized at run start by `initialize_okrs()` in `src/orchestrator.py` using the mission, vision, and current task. The LLM derives concrete objectives and key results appropriate to the task — no manual pre-definition required.
+
+**How KRs are assigned to agents:**
+- The orchestrator selects relevant KR IDs for each agent's role
+- KR IDs and descriptions are injected into the agent's task instructions
+- Agents return a `KRUpdate` (score 0.0–1.0 + narrative) for each assigned KR
+
+**Self-correction progression:**
+1. Score below threshold, attempts=0 → retry with adjusted instructions
+2. Score below threshold, attempts=1 → re-route to alternate agent
+3. Score below threshold, attempts=2 → downgrade threshold 20%, continue
+4. Score below threshold, attempts=3 → escalate to human (see below)
+
+**Escalation:**
+When all self-correction is exhausted, `format_escalation_report()` prints a structured report and halts the run. The human decides: revise instructions, accept current progress, or abort.
+
+**Dashboard:**
+`okr-status.json` is written after every agent cycle. Read it at any point to see current objective scores and KR narratives without interrupting the run.
+
 ## Conventions
 - Agents are stateless — all state is passed via the context object, never stored on the agent instance
 - Each agent has exactly one system prompt file in `src/prompts/agents/`
 - Tools are defined in `src/tools/` and imported by agents that need them; never defined inline
 - All inter-agent communication goes through the orchestrator; agents do not call each other directly
 - The orchestrator checks `TokenBudget.agent_config()` before each dispatch and respects `None` (skip) returns
+- Agents never import `src/okr/` directly — they receive KR IDs in their task instructions and return `KRUpdate` objects in their output
 ```
