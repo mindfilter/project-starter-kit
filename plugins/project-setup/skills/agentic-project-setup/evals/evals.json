@@ -100,6 +100,38 @@
           "text": "Plugin recommendations include feature-dev (team signal with 4 people)"
         }
       ]
+    },
+    {
+      "id": 4,
+      "prompt": "Build a content moderation system: multiple specialist agents (toxicity detector, spam detector, sentiment analyzer) each evaluate incoming content independently, then hand their scores directly to a scoring agent that makes the final decision. No central orchestrator — agents route to each other. Python, solo developer, production system.",
+      "expected_output": "Creates Python multi-agent project with swarm/peer-to-peer orchestration pattern, agents/toxicity.py, agents/spam.py, agents/sentiment.py, agents/scorer.py with direct handoff logic, prompts/agents/ for per-agent prompts, CLAUDE.md describing swarm pattern and all four agent roles with 'Operational Considerations' section covering token cost and failure handling, .mcp.json with memory server.",
+      "files": [],
+      "assertions": [
+        {
+          "id": "claude-md-mentions-swarm-pattern",
+          "text": "CLAUDE.md mentions 'swarm' or 'peer-to-peer' as orchestration pattern"
+        },
+        {
+          "id": "claude-md-mentions-all-agent-roles",
+          "text": "CLAUDE.md mentions toxicity, spam, sentiment, and scorer agents (or similar names)"
+        },
+        {
+          "id": "folder-has-agents-directory",
+          "text": "Folder structure includes agents/ directory with named agent files"
+        },
+        {
+          "id": "folder-has-agent-prompts",
+          "text": "Folder structure includes prompts/agents/ directory"
+        },
+        {
+          "id": "mcp-json-has-memory",
+          "text": ".mcp.json includes memory server"
+        },
+        {
+          "id": "claude-md-has-operational-considerations",
+          "text": "CLAUDE.md includes 'Operational Considerations' section covering token cost or failure handling"
+        }
+      ]
     }
   ]
 }

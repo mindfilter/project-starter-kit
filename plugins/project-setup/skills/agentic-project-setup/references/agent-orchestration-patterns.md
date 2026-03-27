@@ -12,8 +12,27 @@ Reference: load this file during research and scaffold phases when agentic signa
 | **Pipeline** | Agents pass output sequentially — A → B → C | Each stage transforms output from the previous; strict ordering required |
 | **Fan-out / fan-in** | Orchestrator spawns parallel agents for the same task, aggregates results | Tasks are independent and can run concurrently (e.g., multi-source research) |
 | **Router** | A classifier agent inspects input and hands off to the right specialist | Input type is unpredictable at design time; specialists are mutually exclusive |
+| **Swarm / peer-to-peer** | Agents detect handoff signals and route directly to the next appropriate agent; no central coordinator | Requirements emerge dynamically; rigid upfront planning is counterproductive; no single point of failure required |
 
 Most real systems combine patterns. A router often dispatches to orchestrator-worker sub-graphs.
+
+**Caution — orchestrator-worker "telephone game"**: When an orchestrator paraphrases or summarizes agent outputs before passing them downstream, information fidelity degrades with each hop. Mitigation: pass structured typed fields between agents, not natural language summaries. The orchestrator should route results directly, not reinterpret them.
+
+---
+
+## Pattern Selection Guide
+
+Use this when the user selects "I'm not sure" or when their description is ambiguous.
+
+| If the user needs... | Recommend |
+|----------------------|-----------|
+| Rigid control, auditability, human oversight at each step | Orchestrator-worker |
+| Clear sequential stages where each step transforms the last | Pipeline |
+| The same task run against multiple independent sources simultaneously | Fan-out / fan-in |
+| Dynamic routing based on unpredictable input type | Router |
+| Flexible exploration, emergent requirements, no rigid plan upfront | Swarm / peer-to-peer |
+
+**Swarm vs. orchestrator-worker decision test**: Does the system need a single authority that approves and coordinates every handoff? If yes → orchestrator-worker. If agents can detect task completion and route themselves to the next step → swarm eliminates the central bottleneck and single point of failure.
 
 ---
 
@@ -131,6 +150,30 @@ Document what lives in the context object and who writes to each field:
 ### Communication
 
 Document how agents receive tasks and return results — function call, message queue, MCP tool, etc. Be explicit about sync vs. async.
+
+---
+
+## Failure Resilience
+
+Multi-agent systems fail in ways single-agent systems don't. Document the failure strategy in CLAUDE.md and scaffold for it from the start.
+
+**Circuit breaker** — if an agent fails N consecutive times, route to a backup agent or degrade gracefully rather than blocking the pipeline indefinitely. Implement at the orchestrator or handoff layer, not inside individual agents.
+
+**Exponential backoff** — transient failures (rate limits, network timeouts) should be retried with increasing delays. Agents that call external APIs should wrap calls with retry logic.
+
+**Idempotency** — agents that write to shared state (context object, memory server, database) must be safe to call more than once with the same input. If a retry produces a duplicate write, the system should handle it without corrupting state.
+
+**What to document in CLAUDE.md** — add an "Operational Considerations" section that states: which agents are failure-critical (pipeline blocks if they fail), which are optional (graceful degradation if they fail), and what the retry/circuit-breaker strategy is.
+
+---
+
+## Economic Considerations
+
+Multi-agent systems cost significantly more to run than single-agent systems — each agent invocation consumes its own context window and token budget. In production, this can reach 10–15x the token cost of an equivalent single-agent chat.
+
+**Flag this at scaffold time**: add a comment to `src/orchestrator.py` and a note in CLAUDE.md under "Operational Considerations" so the user knows what they're signing up for before they're surprised by a bill.
+
+**Design implication**: keep agent context windows lean. Each agent should receive only the slice of state it needs (see Agent isolation below), not the full context object. Bloated context windows are the primary cost driver in multi-agent systems.
 
 ---
 

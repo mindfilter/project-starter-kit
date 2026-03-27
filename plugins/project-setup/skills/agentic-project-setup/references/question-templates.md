@@ -25,6 +25,7 @@ Options:
 - Pipeline (agents process in sequence, each passing output to the next)
 - Fan-out / fan-in (orchestrator spawns parallel agents, collects and merges results)
 - Router (classifier agent routes each request to the right specialist)
+- Swarm / peer-to-peer (agents hand off directly to each other; no central coordinator)
 - I'm not sure — describe my use case and help me pick
 
 Question 4: "What's your context?"
@@ -77,7 +78,10 @@ After the interview, these signals should trigger research:
 | Claude Agent SDK | Use context7 to fetch current SDK docs for orchestration patterns |
 | Anthropic SDK | Use context7 to fetch claude messages API docs |
 | "pipeline" / "fan-out" / "parallel" | Load agent-orchestration-patterns.md workflow patterns section |
+| "swarm" / "peer-to-peer" / "handoff" / "no central coordinator" | Load swarm pattern and Pattern Selection Guide from agent-orchestration-patterns.md |
+| "I'm not sure" (pattern question) | Load Pattern Selection Guide from agent-orchestration-patterns.md and use it to recommend a pattern based on their Round 1 description |
 | A specific framework (LangChain, CrewAI, etc.) | Use context7 to fetch current framework docs |
 | "memory" / "cross-session" / "persistent" | Add MCP memory server to recommendations |
 | "web research" / "search" | Add brave-search MCP for research-agent role |
 | "GitHub" / "PR" / "code review" | Add github MCP for automation agent workflows |
+| Production system (solo or team) | Note multi-agent token cost in CLAUDE.md "Operational Considerations" section |

@@ -4,8 +4,9 @@ description: >
   Use when setting up, scaffolding, or bootstrapping a multi-agent orchestration project.
   Triggers on: "multi-agent", "multi-agent system", "agent orchestration", "orchestrator", "subagents",
   "agent pipeline", "fan-out agents", "parallel agents", "agent workflow", "build an agent
-  that spawns agents", "specialized agents", or any variation where the user needs to set
-  up a project involving multiple AI agents coordinating with each other.
+  that spawns agents", "specialized agents", "swarm", "peer-to-peer agents", "agent handoff",
+  "distributed agents", or any variation where the user needs to set up a project involving
+  multiple AI agents coordinating with each other.
   Also triggers when a user opens a blank directory and describes a system with multiple
   AI agents working together.
   This skill scaffolds orchestration-ready folder structure, agent role architecture,
@@ -30,7 +31,7 @@ Then use `AskUserQuestion` to learn about their agent system. Load `references/q
 **Round 1** (always ask these, 4 questions in one call):
 1. Project description — what the system does, what problem it solves, who uses it
 2. Tech stack — Python, TypeScript, or "help me pick"
-3. Orchestration pattern — sequential pipeline, parallel fan-out, hierarchical, event-driven, or "not sure yet"
+3. Orchestration pattern — sequential pipeline, parallel fan-out, router, swarm/peer-to-peer, or "not sure yet"
 4. Team context — solo hobby / solo production / small team / larger team
 
 **Round 2** (conditional — if Round 1 reveals multiple distinct agent roles):
@@ -59,7 +60,7 @@ Research in parallel based on interview signals. Load the research triggers sect
 
 Load `references/mcp-catalog.md` to map agent role signals to MCP server recommendations.
 Load `references/plugin-catalog.md` to map project signals to plugin recommendations.
-Load `references/agent-orchestration-patterns.md` to select and understand the right pattern for their use case.
+Load `references/agent-orchestration-patterns.md` to select and understand the right pattern for their use case. If the user selected "I'm not sure" or chose swarm/peer-to-peer, also use the Pattern Selection Guide in that file to recommend or confirm the right pattern before planning.
 
 ---
 
@@ -115,7 +116,7 @@ After approval, load `references/folder-structures.md` for the directory layout 
 **Create in this order** (so if something fails, partial state is still useful):
 
 1. **Folder structure** — create all directories with their actual agent names filled in (e.g., `src/agents/researcher.py` not `src/agents/[role].py`)
-2. **CLAUDE.md** — fill the template with: project description, tech stack, agent roles table with actual names, orchestration pattern, state contract, how to add a new agent for their system
+2. **CLAUDE.md** — fill the template with: project description, tech stack, agent roles table with actual names, orchestration pattern, state contract, how to add a new agent for their system. Always include an "Operational Considerations" section noting: (a) multi-agent systems have significantly higher token costs than single-agent — flag if this is a production system; (b) the failure handling strategy (which agents are critical vs. optional, retry/circuit-breaker approach).
 3. **.mcp.json** — always include memory + context7; add agent-specific servers based on what each agent does
 4. **.claude/settings.json** — formatter hook for their stack + prompt file validation + .env protection
 5. **.env.example** — ANTHROPIC_API_KEY + any others their stack and agent roles require
