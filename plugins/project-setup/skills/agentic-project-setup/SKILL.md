@@ -86,6 +86,7 @@ Structure the plan as:
 
 ### Plugins to Enable
 [Each plugin + what it gives them]
+| playground | Concept map of the full system (used for pre-scaffold review) |
 
 ### Hooks
 [Formatter for their stack + prompt file validation + .env protection]
@@ -102,11 +103,55 @@ Structure the plan as:
 - src/prompts/agents/ prompt files for each agent
 ```
 
+### Concept Map Review (before scaffold)
+
+After presenting the text plan, ask the user:
+
+> "Before we build this — would you like a concept map of the full system? This shows how you, the orchestrator, agents, OKR framework, tools, and token budget all connect — so you can review the complete operational picture and adjust anything before files are created."
+> - Yes — generate the concept map
+> - No — the text plan is enough, proceed
+
+If yes, use the playground plugin to generate a concept map with these layers:
+
+**Human layer**
+- `[You]` — entry point showing what the user provides as input and receives as output
+
+**Goal layer (OKR framework)**
+- `[Mission]` — why the system exists (from interview)
+- `[Vision]` — what success looks like (from interview)
+- `[Objectives]` → `[Key Results]` — goal hierarchy driving self-correction
+
+**Orchestration layer**
+- `[Orchestrator]` — receives task from user; dispatches to agents; evaluates KR updates; writes `okr-status.json`; connected to Token Budget and OKR Registry
+
+**Agent layer** (one node per named agent)
+- Each agent node: role label, tools it uses, which KRs it reports on
+- Directed edges: Orchestrator → agent (dispatch) and agent → Orchestrator (KRUpdate)
+
+**Infrastructure layer**
+- `[Token Budget]` — tracks total / spent / remaining across all agent dispatches
+- `[OKR Registry]` — stores objectives, KRs, and current scores
+- `[Tools / MCPs]` — grouped by agent: which MCP servers each agent calls
+
+**Self-correction flow**
+- RETRY → REROUTE → DOWNGRADE → ESCALATE as a feedback loop from OKR Registry back to Orchestrator
+
+**Output layer**
+- `[Result]` → back to `[You]`
+- `[okr-status.json]` — dashboard artifact written each cycle
+
+Present the map and ask if the user wants to adjust agent names, roles, tools, or any flow before anything is built. Incorporate any feedback into the plan.
+
 Then use `ExitPlanMode` to get approval before touching anything.
 
 ---
 
 ## Phase 4: Scaffold
+
+**Prerequisite:** Before creating any files, ensure the `playground` plugin is installed:
+```
+/plugin install playground@claude-plugins-official
+```
 
 After approval, load `references/folder-structures.md` for the directory layout and CLAUDE.md template. Load `references/hooks-patterns.md` for hook configurations.
 
