@@ -63,9 +63,9 @@ Load `references/agent-orchestration-patterns.md` to select and understand the r
 
 ## Phase 3: Present the Plan
 
-Present a structured plan before creating anything. The user should understand why you're recommending each piece — this builds trust and lets them correct misunderstandings before you build the wrong thing.
+Phase 3 has three steps — do them in order:
 
-Structure the plan as:
+**Step 1 — Present the text plan.** The user should understand why you're recommending each piece. Structure it as:
 
 ```
 ## Your Agentic Project Setup Plan
@@ -103,15 +103,18 @@ Structure the plan as:
 - src/prompts/agents/ prompt files for each agent
 ```
 
-### Concept Map Review (before scaffold)
-
-After presenting the text plan, ask the user:
+**Step 2 — Offer a concept map.** After presenting the text plan, use `AskUserQuestion` to ask:
 
 > "Before we build this — would you like a concept map of the full system? This shows how you, the orchestrator, agents, OKR framework, tools, and token budget all connect — so you can review the complete operational picture and adjust anything before files are created."
 > - Yes — generate the concept map
-> - No — the text plan is enough, proceed
+> - No — the text plan is enough, proceed to approval
 
-If yes, use the playground plugin to generate a concept map with these layers:
+If yes, first install the playground plugin if not already present:
+```
+/plugin install playground@claude-plugins-official
+```
+
+Then use the playground plugin to generate a concept map with these layers:
 
 **Human layer**
 - `[You]` — entry point showing what the user provides as input and receives as output
@@ -140,18 +143,13 @@ If yes, use the playground plugin to generate a concept map with these layers:
 - `[Result]` → back to `[You]`
 - `[okr-status.json]` — dashboard artifact written each cycle
 
-Present the map and ask if the user wants to adjust agent names, roles, tools, or any flow before anything is built. Incorporate any feedback into the plan.
+Present the map and ask if the user wants to adjust agent names, roles, tools, or any flow. Incorporate any feedback before moving to Step 3.
 
-Then use `ExitPlanMode` to get approval before touching anything.
+**Step 3 — Get scaffold approval.** Use `ExitPlanMode` to get final approval before touching anything.
 
 ---
 
 ## Phase 4: Scaffold
-
-**Prerequisite:** Before creating any files, ensure the `playground` plugin is installed:
-```
-/plugin install playground@claude-plugins-official
-```
 
 After approval, load `references/folder-structures.md` for the directory layout and CLAUDE.md template. Load `references/hooks-patterns.md` for hook configurations.
 
