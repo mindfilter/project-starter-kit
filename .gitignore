@@ -1,6 +1,9 @@
 # Git worktrees
 .worktrees/
 
+# Internal development plans (not relevant for marketplace users)
+docs/
+
 # Eval workspace (large, not needed for marketplace users)
 plugins/project-setup/skills/project-setup-workspace/
 
