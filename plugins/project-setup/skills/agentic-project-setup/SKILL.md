@@ -109,39 +109,49 @@ Phase 3 has three steps — do them in order:
 > - Yes — generate the concept map
 > - No — the text plan is enough, proceed to approval
 
-If yes, first install the playground plugin if not already present:
-```
-/plugin install playground@claude-plugins-official
-```
+If yes, use the `Skill` tool with `skill: "playground"` to generate an interactive concept map HTML file. In your prompt to the playground skill, include:
 
-Then use the playground plugin to generate a concept map with these layers:
+- This is a concept map for a multi-agent system
+- Pre-populate nodes and edges from the planned system (see below)
+- Use the concept-map template with a canvas layout
 
-**Human layer**
-- `[You]` — entry point showing what the user provides as input and receives as output
+**Pre-populate these nodes** (default knowledge level: Fuzzy):
 
-**Goal layer (OKR framework)**
+- `[You]` — human entry point; provides task input, receives result output
 - `[Mission]` — why the system exists (from interview)
 - `[Vision]` — what success looks like (from interview)
-- `[Objectives]` → `[Key Results]` — goal hierarchy driving self-correction
-
-**Orchestration layer**
-- `[Orchestrator]` — receives task from user; dispatches to agents; evaluates KR updates; writes `okr-status.json`; connected to Token Budget and OKR Registry
-
-**Agent layer** (one node per named agent)
-- Each agent node: role label, tools it uses, which KRs it reports on
-- Directed edges: Orchestrator → agent (dispatch) and agent → Orchestrator (KRUpdate)
-
-**Infrastructure layer**
-- `[Token Budget]` — tracks total / spent / remaining across all agent dispatches
+- `[Objective 1..N]` — one node per objective from the OKR plan
+- `[Key Result 1..N]` — one node per KR, linked to its objective
+- `[Orchestrator]` — receives task; dispatches agents; evaluates KR updates; writes okr-status.json
+- `[Token Budget]` — tracks total/spent/remaining tokens across all dispatches
 - `[OKR Registry]` — stores objectives, KRs, and current scores
-- `[Tools / MCPs]` — grouped by agent: which MCP servers each agent calls
+- One node per named agent (use real names from the plan), with role label
+- One node per MCP/tool group each agent uses
+- `[okr-status.json]` — output artifact written each cycle
+- `[Result]` — final output back to user
 
-**Self-correction flow**
-- RETRY → REROUTE → DOWNGRADE → ESCALATE as a feedback loop from OKR Registry back to Orchestrator
+**Pre-populate these edges** (use real agent names from the plan):
 
-**Output layer**
-- `[Result]` → back to `[You]`
-- `[okr-status.json]` — dashboard artifact written each cycle
+- You → Orchestrator: "sends task"
+- Mission/Vision → Objectives: "shapes"
+- Objectives → Key Results: "measured by"
+- Orchestrator → each Agent: "dispatches"
+- each Agent → Orchestrator: "KRUpdate"
+- each Agent → its MCP/tool nodes: "calls"
+- Orchestrator → Token Budget: "tracks spend"
+- Orchestrator → OKR Registry: "reads/writes"
+- OKR Registry → Orchestrator: "RETRY / REROUTE / DOWNGRADE / ESCALATE"
+- Key Results → OKR Registry: "scored in"
+- Orchestrator → okr-status.json: "writes"
+- Orchestrator → Result: "produces"
+- Result → You: "returned to"
+
+**Presets to include:**
+- "Full system" — all nodes visible
+- "Agent focus" — hide Goal layer, show only Orchestrator + agents + tools
+- "OKR flow" — hide agents, show Mission → Vision → Objectives → KRs → Registry loop
+
+After the playground skill writes the HTML file, run `open <filename>.html` to launch it in the browser.
 
 Present the map and ask if the user wants to adjust agent names, roles, tools, or any flow. Incorporate any feedback before moving to Step 3.
 
