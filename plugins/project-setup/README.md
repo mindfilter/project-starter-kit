@@ -48,12 +48,14 @@ The scaffolded `TokenBudget` utility gives the orchestrator awareness of remaini
 
 - context7 MCP server (for live documentation lookup)
 - github MCP plugin (for community resource discovery)
+- playground plugin (for concept map visualization during agentic project setup)
 
-Both are available via the official Claude Code marketplace:
+All are available via the official Claude Code marketplace:
 
 ```
 /plugin install context7@claude-plugins-official
 /plugin install github@claude-plugins-official
+/plugin install playground@claude-plugins-official
 ```
 
 ## Usage
