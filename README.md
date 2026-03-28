@@ -26,7 +26,7 @@ Then browse and install individual plugins:
 
 | Skill | Triggers on | What it does |
 |-------|------------|--------------|
-| **agentic-project-setup** | "multi-agent", "orchestrator", "swarm", "agent pipeline", "distributed agents", and similar | Scaffolds a complete multi-agent orchestration project: interviews you about agent roles and orchestration pattern, recommends MCP servers and plugins, generates typed context objects, agent stubs, prompt files, and an orchestrator with token budget management |
+| **agentic-project-setup** | "multi-agent", "orchestrator", "swarm", "agent pipeline", "distributed agents", and similar | Scaffolds a complete multi-agent orchestration project: interviews you about agent roles and orchestration pattern, generates a concept map of the full system for review before building, then creates agent stubs, prompt files, OKR module, token budget utility, and an OKR-aware orchestrator |
 
 #### Orchestration patterns covered
 
@@ -38,12 +38,12 @@ Then browse and install individual plugins:
 
 #### What gets scaffolded
 
-- `CLAUDE.md` with agent roles table, state contract, orchestration pattern, and operational considerations
+- `CLAUDE.md` with agent roles table, OKR contract, orchestration pattern, and operational considerations
 - `src/agents/` — one typed stub per named agent, inheriting from a shared base
 - `src/prompts/agents/` — one system prompt file per agent
-- `src/state/context.py` (or `.ts`) — typed context object documenting who writes/reads each field
+- `src/okr/` — OKR module (types, registry, evaluator, escalation) driving self-correction
 - `src/budget.py` (or `.ts`) — `TokenBudget` utility for resource-aware orchestration
-- `src/orchestrator.py` (or `.ts`) — routing stub showing the dispatch and budget-check pattern
+- `src/orchestrator.py` (or `.ts`) — OKR-aware orchestrator stub with dispatch, evaluation, and self-correction loop
 - `.mcp.json` — memory + context7 + agent-specific MCP servers
 - `.claude/settings.json` — formatter hooks, prompt file validation, `.env` protection
 
@@ -54,6 +54,7 @@ Before using `project-setup`, install these from the official marketplace:
 ```
 /plugin install context7@claude-plugins-official
 /plugin install github@claude-plugins-official
+/plugin install playground@claude-plugins-official
 ```
 
 ## Contributing
